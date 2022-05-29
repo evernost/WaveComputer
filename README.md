@@ -1,2 +1,2 @@
 # WaveComputer
-Rudimentary computer aimed at audio analysis and processing on a ZedBoard.
+Rudimentary computer for audio analysis and processing on a ZedBoard.
