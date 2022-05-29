@@ -43,8 +43,8 @@ use vesa_lib.vesa_pkg.all;
 entity vesa is
 generic
 (
-  RESET_POL       : STD_LOGIC := '1';
-  RESET_SYNC      : BOOLEAN := true;
+  RESET_POL       : STD_LOGIC;
+  RESET_SYNC      : BOOLEAN;
   PIXEL_DATA_BUS  : NATURAL range 1 to 31 := 8;
   H_ACTIVE_POL    : STD_LOGIC := '1';
   V_ACTIVE_POL    : STD_LOGIC := '1'

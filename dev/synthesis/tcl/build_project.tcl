@@ -13,7 +13,7 @@
 # =============================================================================
 
 # Terminal command:
-# > cd D:/recherche/projets/projet_VGA/dev/synthesis
+# > cd D:/recherche/projets/WaveComputer/dev/synthesis
 # > source ./tcl/build_project.tcl
 
 # XSCT: 
@@ -35,18 +35,18 @@ set ip_target_part    "xc7z020clg484-1"
 set ip_target_family  "zynq"
 set ip_target_board   "em.avnet.com:zed:part0:1.4"
 
-set root_dir "D:/recherche/projets/projet_VGA/dev"
+set root_dir "D:/recherche/projets/WaveComputer/dev"
 
 set project_path  "${root_dir}/synthesis/vivado"
-set project_name  "projet_VGA_vivado"
+set project_name  "vivado_project_QB"
 
 set source_path "${root_dir}/src"
+set tb_path     "${root_dir}/tb"
 set constr_path "${root_dir}/synthesis/constraints"
 
-set design_name "mon_design"
-set block_name  "mon_bloc"
+set design_name "design_QB"
 
-set user_IP_repo  "../../mon_repo_IP"
+set user_IP_repo  "../../IP_repo_QB"
 
 # =============================================================================
 # Build project
@@ -84,10 +84,8 @@ read_vhdl -library misc_lib "${source_path}/PL_top_level.vhd"
 
 # Testbench
 set_property SOURCE_SET sources_1 [get_filesets sim_1]
-add_files -fileset sim_1 -norecurse "D:/recherche/projets/projet_VGA/dev/tb/tb_blinky.vhd"
-
-
-add_files -fileset sim_1 -norecurse "D:/recherche/projets/projet_VGA/dev/tb/tb_debouncer.vhd"
+add_files -fileset sim_1 -norecurse "${tb_path}/tb_blinky.vhd"
+add_files -fileset sim_1 -norecurse "${tb_path}/tb_debouncer.vhd"
 
 # =============================================================================
 # Create block design
