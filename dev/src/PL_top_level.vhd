@@ -52,11 +52,8 @@ port
 
   PB_L  : in STD_LOGIC;
   PB_R  : in STD_LOGIC;
-  LED_0 : out STD_LOGIC;
-  LED_1 : out STD_LOGIC;
-  LED_2 : out STD_LOGIC;
-  LED_3 : out STD_LOGIC;
-  LED_4 : out STD_LOGIC
+
+  LEDs  : out STD_LOGIC_VECTOR(7 downto 0)
 );
 end PL_top_level;
 
@@ -68,7 +65,10 @@ architecture arch_0 of PL_top_level is
 signal reset_int    : STD_LOGIC;
 signal soft_reset_d : STD_LOGIC;
 
-signal LED_reg    : STD_LOGIC_VECTOR(3 downto 0);
+signal LED_blink  : STD_LOGIC;
+signal MUX_pos    : INTEGER range 0 to 7;
+signal LED_reg    : STD_LOGIC_VECTOR(7 downto 0);
+
 signal PB_L_event : STD_LOGIC;
 signal PB_R_event : STD_LOGIC;
 
@@ -114,14 +114,14 @@ begin
     RESET_POL       => RESET_POL,
     RESET_SYNC      => true,
     CLOCK_FREQ_MHZ  => 75.0,
-    BLINK_FREQ_HZ   => 0.5
+    BLINK_FREQ_HZ   => 2.0
   )
   port map
   ( 
     clock     => clock,
     reset     => reset_int,
     
-    blink_out => LED_0
+    blink_out => LED_blink
   );
 
   -- --------------------------------------------------------------------------
@@ -165,6 +165,7 @@ begin
     RESET_POL         => RESET_POL,
     RESET_SYNC        => true,
     CLOCK_FREQ_MHZ    => 75.0,
+    BLIND_TIME_MS     => 5.0,
     NOTIFICATION_TIME => 1,
     EVENT_TRIG_POL    => 1
   )
@@ -185,6 +186,7 @@ begin
     RESET_POL         => RESET_POL,
     RESET_SYNC        => true,
     CLOCK_FREQ_MHZ    => 75.0,
+    BLIND_TIME_MS     => 5.0,
     NOTIFICATION_TIME => 1,
     EVENT_TRIG_POL    => 1
   )
@@ -199,10 +201,11 @@ begin
     event => PB_R_event
   );
 
-  p_k2000 : process(clock, reset_int)
+  p_MUX : process(clock, reset_int)
   procedure reset_procedure is 
   begin
-    LED_reg <= "0001";
+    MUX_pos <= 0;
+    LED_reg <= (others => '0');
   end reset_procedure;
   begin
     if (reset_int = RESET_POL) then
@@ -211,20 +214,31 @@ begin
       if (reset_int = RESET_POL) then
         reset_procedure;
       else
+        
+        -- Handle push button event
         if (PB_L_event = '1') then
-          LED_reg <= LED_reg(2 downto 0) & '0';
+          if (MUX_pos < 7) then
+            MUX_pos <= MUX_pos + 1;
+          end if;
         elsif (PB_R_event = '1') then
-          LED_reg <= '0' & LED_reg(3 downto 1);
+          if (MUX_pos > 0) then
+            MUX_pos <= MUX_pos - 1;
+          end if;
         end if;
 
+        -- Route the blinker
+        for i in 0 to 7 loop
+          if (i = MUX_pos) then
+            LED_reg(i) <= LED_blink;
+          else
+            LED_reg(i) <= '0';
+          end if;
+        end loop;
       end if;
     end if;
-  end process p_k2000;
+  end process p_MUX;
 
-  LED_1 <= LED_reg(0);
-  LED_2 <= LED_reg(1);
-  LED_3 <= LED_reg(2);
-  LED_4 <= LED_reg(3);
+  LEDs <= LED_reg;
 
 end arch_0;
 

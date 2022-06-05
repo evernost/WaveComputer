@@ -11,21 +11,11 @@
 # =============================================================================
 # Description
 # =============================================================================
-
-# Terminal command:
-# > cd D:/recherche/projets/WaveComputer/dev/synthesis
+# Automated Vivado project builder.
+#
+# Open Vivado in ./synthesis.
+# In the invite, type:
 # > source ./tcl/build_project.tcl
-
-# XSCT: 
-# > cd D:/recherche/projets/projet_VGA/dev/synthesis/vivado/projet_VGA_vivado/projet_VGA_vivado.srcs/sources_1/bd/mon_design/ip/mon_design_processing_system7_0_0
-# > source ps7_init.tcl
-# > connect
-# > target 1
-# > ps7_init
-# > ps7_post_config
-
-# Batch: 
-# > vivado -mode batch -notrace -nojournal -log my_logfile.log -source build.tcl -tclargs arg1 arg2 
 
 # =============================================================================
 # Target settings
@@ -151,24 +141,17 @@ make_bd_pins_external [get_bd_pins PL_top_level_0/soft_reset]
 make_bd_pins_external [get_bd_pins PL_top_level_0/PB_L]
 make_bd_pins_external [get_bd_pins PL_top_level_0/PB_R]
 
-make_bd_pins_external [get_bd_pins PL_top_level_0/LED_0]
-make_bd_pins_external [get_bd_pins PL_top_level_0/LED_1]
-make_bd_pins_external [get_bd_pins PL_top_level_0/LED_2]
-make_bd_pins_external [get_bd_pins PL_top_level_0/LED_3]
-make_bd_pins_external [get_bd_pins PL_top_level_0/LED_4]
+make_bd_pins_external [get_bd_pins PL_top_level_0/LEDs]
 
 make_bd_pins_external [get_bd_pins PL_top_level_0/display_hsync] 
 make_bd_pins_external [get_bd_pins PL_top_level_0/display_vsync] 
 make_bd_pins_external [get_bd_pins PL_top_level_0/display_data] 
 
-set_property name PB_C          [get_bd_ports soft_reset_0]
-set_property name PB_L          [get_bd_ports PB_L_0]
-set_property name PB_R          [get_bd_ports PB_R_0]
-set_property name LED_0         [get_bd_ports LED_0_0]
-set_property name LED_1         [get_bd_ports LED_1_0]
-set_property name LED_2         [get_bd_ports LED_2_0]
-set_property name LED_3         [get_bd_ports LED_3_0]
-set_property name LED_4         [get_bd_ports LED_4_0]
+set_property name PB_C  [get_bd_ports soft_reset_0]
+set_property name PB_L  [get_bd_ports PB_L_0]
+set_property name PB_R  [get_bd_ports PB_R_0]
+
+set_property name LEDs  [get_bd_ports LEDs_0]
 
 set_property name display_hsync [get_bd_ports display_hsync_0]
 set_property name display_vsync [get_bd_ports display_vsync_0]
